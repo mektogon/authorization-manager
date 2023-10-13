@@ -1,0 +1,16 @@
+databaseChangeLog:
+    - include:
+        file: create_role_table_cf3c4e93-6970-4319-b69b-a22e48e56346.sql
+        relativeToChangelogFile: true
+    - include:
+        file: create_users_table_9eff576b-13aa-412f-bb3f-4c24a560e0a4.sql
+        relativeToChangelogFile: true
+    - include:
+        file: create_code_table_75ce7ea5-bf00-4f48-8118-47fba7bfef27.sql
+        relativeToChangelogFile: true
+    - include:
+        file: create_common_settings_table_6817b581-4a76-4886-93c5-c97005fc0fb8.sql
+        relativeToChangelogFile: true
+    - include:
+        file: create_photo_table_a0034f35-e864-4937-871b-09796abb2e2e.sql
+        relativeToChangelogFile: true

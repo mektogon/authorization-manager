@@ -1,0 +1,14 @@
+spring:
+  profiles:
+    default: DEV
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+  datasource:
+    url: ${POSTGRES_HOST}/${POSTGRES_DB}
+    username: ${POSTGRES_USR}
+    password: ${POSTGRES_PWD}
+  liquibase:
+    enabled: true
+    change-log: classpath:changelog/changelog.yaml

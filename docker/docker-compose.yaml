@@ -1,0 +1,31 @@
+version: "3"
+services:
+  postgres:
+    container_name: postgres-15.3
+    image: postgres:15.3
+    ports:
+      - "5430:5432"
+    restart: on-failure
+    volumes:
+      - ./auth-manager/postgresql/15.3/data:/var/lib/postgresql/data
+    env_file:
+      - .env
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USR}
+      - POSTGRES_PASSWORD=${POSTGRES_PWD}
+  auth-manager:
+    container_name: app
+    build: ../
+    ports:
+      - "8081:8080"
+    restart: always
+    depends_on:
+      - postgres
+    env_file:
+      - .env
+    environment:
+      - POSTGRES_HOST=${POSTGRES_HOST}
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USR=${POSTGRES_USR}
+      - POSTGRES_PWD=${POSTGRES_PWD}
