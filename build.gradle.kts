@@ -20,22 +20,23 @@ repositories {
 }
 
 dependencies {
-    implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springframework.boot:spring-boot-starter-web:3.1.0")
     implementation("org.springframework.boot:spring-boot-starter-actuator:3.1.2")
-    implementation("org.springframework:spring-web:6.0.11")
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa:3.1.4")
+    implementation("org.springframework.boot:spring-boot-starter-mail:3.1.2")
+    implementation("org.springframework.boot:spring-boot-starter-validation:3.1.0")
     implementation("org.slf4j:slf4j-api:2.0.7")
     implementation("io.springfox:springfox-swagger-ui:3.0.0")
     implementation("org.postgresql:postgresql:42.6.0")
     implementation("org.mapstruct:mapstruct:1.5.5.Final")
     implementation("org.projectlombok:lombok-mapstruct-binding:0.2.0")
-    implementation("org.springframework.boot:spring-boot-starter-mail:3.1.2")
     implementation("org.liquibase:liquibase-core:4.23.0")
 
     compileOnly("org.projectlombok:lombok:1.18.28")
 
-    providedRuntime("org.springframework.boot:spring-boot-starter-tomcat")
+    providedRuntime("org.springframework.boot:spring-boot-starter-tomcat:3.1.0")
 
-    testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("org.springframework.boot:spring-boot-starter-test:3.1.0")
     testImplementation("org.testcontainers:testcontainers:1.18.3")
 }
 
@@ -43,12 +44,18 @@ tasks.withType<Test> {
     useJUnitPlatform()
 }
 
-tasks.getByName<Jar>("jar") {
+tasks.jar {
     enabled = false //Disable generation plain-file for jar-package
 }
 
-tasks.getByName<War>("war") {
+tasks.war {
     enabled = false //Disable generation plain-file for war-package
+}
+
+tasks.bootRun {
+    if (project.hasProperty("args")) { //Many arguments for bootRun
+        args(project.properties["args"]?.toString()?.split(","))
+    }
 }
 
 tasks.register("createPatch") {
@@ -93,13 +100,12 @@ tasks.register("createPatch") {
     }
 
     val basePathToFile = project.layout.projectDirectory.dir("src/main/resources/db/")
-    val pathToCurrentPatchCatalog = "$basePathToFile/$versionToCatalogLiquibase"
     val changelogName = "changelog.yaml"
-    val resultPatchName = "${project.property("patchname")}_${randomUUID()}.sql"
+    val patchName = "${project.property("patchname")}_${randomUUID()}.sql"
 
     var defaultDataScript = """
         --liquibase formatted sql
-        --changeset <AUTHOR NAME>:$resultPatchName:<TASK NAME>
+        --changeset <AUTHOR NAME>:$patchName:<TASK NAME>
     """.trimIndent()
 
     if (project.hasProperty("type")) {
@@ -108,17 +114,17 @@ tasks.register("createPatch") {
 
     outputs.files(
             "$basePathToFile/$changelogName", //Master-changelog
-            "$pathToCurrentPatchCatalog/$changelogName", //Local-changelog
-            "$pathToCurrentPatchCatalog/$resultPatchName" //Patch-script
+            "$basePathToFile/$versionToCatalogLiquibase/$changelogName", //Local-changelog
+            "$basePathToFile/$versionToCatalogLiquibase/$patchName" //Patch-script
     )
 
     doFirst {
         outputs.files.forEach { file ->
-            if (file.name.equals(resultPatchName)) {
+            if (file.name.equals(patchName)) {
                 file.writeText(defaultDataScript) //Writing patch-script
             } else {
                 if (file.absolutePath.contains(versionToCatalogLiquibase.toString())) { //Writing local-changelog
-                    dataWriter(file, "$versionToCatalogLiquibase/$resultPatchName")
+                    dataWriter(file, patchName)
                 } else { //Writing to the master-changelog
                     if (!file.exists()) { //First writing
                         dataWriter(file, "$versionToCatalogLiquibase/$changelogName")

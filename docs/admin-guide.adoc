@@ -4,7 +4,20 @@
 В приложение используется база данных - https://www.postgresql.org/[PostgreSQL], ER-модель которой выглядит следующим образом:
 
 image::ER-model.png[ER-model]
+=== Подключение к БД:
+База данных поднимается в контейнере Docker с портом 5430.
+Чтобы подключиться к БД, необходимо воспользоваться командой из терминала контейнера:
+[source, text]
+----
+psql -U user_name -d db_name
+----
 
+== Запуск приложения
+Для запуска приложения можно воспользоваться UI Intellij IDEA, либо введя команду:
+[source, text]
+----
+gradlew bootRun -Pargs=-Dspring.profiles.active=DEV,--POSTGRES_HOST=jdbc:postgresql://localhost:5430,--POSTGRES_DB=auth_db,--POSTGRES_USR=postgres,--POSTGRES_PWD=postgres
+----
 == Генерация SQL-патча для Liquibase
 Генерация SQL-патча осуществляется командой
 [source, text]
