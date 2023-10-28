@@ -31,6 +31,7 @@ dependencies {
     implementation("org.mapstruct:mapstruct:1.5.5.Final")
     implementation("org.projectlombok:lombok-mapstruct-binding:0.2.0")
     implementation("org.liquibase:liquibase-core:4.23.0")
+    implementation("io.micrometer:micrometer-registry-prometheus:1.11.5")
 
     compileOnly("org.projectlombok:lombok:1.18.28")
 

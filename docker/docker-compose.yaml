@@ -21,7 +21,8 @@ services:
       - "8081:8080"
     restart: always
     depends_on:
-      - postgres
+      postgres:
+        condition: service_started
     env_file:
       - .env
     environment:
@@ -29,3 +30,27 @@ services:
       - POSTGRES_DB=${POSTGRES_DB}
       - POSTGRES_USR=${POSTGRES_USR}
       - POSTGRES_PWD=${POSTGRES_PWD}
+  prometheus:
+    container_name: prometheus
+    image: prom/prometheus
+    ports:
+      - "9090:9090"
+    restart: on-failure
+    volumes:
+      - ./auth-manager/prometheus:/prometheus
+      - ./configuration/prometheus/prometheus.yaml:/etc/prometheus/prometheus.yml
+  grafana:
+    container_name: grafana
+    image: grafana/grafana
+    ports:
+      - "3000:3000"
+    restart: on-failure
+    volumes:
+      - ./auth-manager/grafana:/var/lib/grafana
+      - ./configuration/grafana/dashboards:/etc/grafana/provisioning/dashboards
+      - ./configuration/grafana/datasources:/etc/grafana/provisioning/datasources
+    env_file:
+      - .env
+    environment:
+      - GF_SECURITY_ADMIN_USER=${GRAFANA_ADMIN_USR}
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PWD}
