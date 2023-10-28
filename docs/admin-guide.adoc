@@ -5,7 +5,7 @@
 
 image::ER-model.png[ER-model]
 === Подключение к БД:
-База данных поднимается в контейнере Docker с портом 5430.
+База данных поднимается в контейнере Docker с портом 5430. +
 Чтобы подключиться к БД, необходимо воспользоваться командой из терминала контейнера:
 [source, text]
 ----
@@ -32,3 +32,7 @@ gradlew createPatch -Ppatchname=create_user_table -Ptype=DML -Ppatchversion=01.0
     - *DDL* (SELECT, INSERT, UPDATE, DELETE)
     - *DML* (CREATE, ALTER, DROP)
 . *patchversion* - Указание расположения патча (*Опциональный параметр*)
+
+== Метрики приложения
+Сбор метрик приложения осуществляется c помощью Prometheus и Grafana. +
+Для того чтобы проанализировать метрики, необходимо зайти по адресу Grafana: localhost:3001
