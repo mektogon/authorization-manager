@@ -32,13 +32,16 @@ dependencies {
     implementation("org.projectlombok:lombok-mapstruct-binding:0.2.0")
     implementation("org.liquibase:liquibase-core:4.23.0")
     implementation("io.micrometer:micrometer-registry-prometheus:1.11.5")
+    implementation("org.springframework.boot:spring-boot-testcontainers:3.1.5")
 
     compileOnly("org.projectlombok:lombok:1.18.28")
 
     providedRuntime("org.springframework.boot:spring-boot-starter-tomcat:3.1.0")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test:3.1.0")
-    testImplementation("org.testcontainers:testcontainers:1.18.3")
+    testImplementation("org.testcontainers:testcontainers:1.19.1")
+    testImplementation("org.testcontainers:junit-jupiter:1.19.1")
+    testImplementation("org.testcontainers:postgresql:1.19.1")
 }
 
 tasks.withType<Test> {
