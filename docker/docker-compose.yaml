@@ -22,7 +22,7 @@ services:
     restart: always
     depends_on:
       postgres:
-        condition: service_started
+        condition: service_healthy
     env_file:
       - .env
     environment:
@@ -30,6 +30,14 @@ services:
       - POSTGRES_DB=${POSTGRES_DB}
       - POSTGRES_USR=${POSTGRES_USR}
       - POSTGRES_PWD=${POSTGRES_PWD}
+  nginx:
+    container_name: backend-nginx-1.25.3
+    image: nginx:1.25.3
+    ports:
+      - "8080:8080"
+    restart: on-failure
+    volumes:
+      - ./configuration/nginx:/etc/nginx/conf.d
   prometheus:
     container_name: prometheus
     image: prom/prometheus
