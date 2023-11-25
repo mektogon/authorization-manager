@@ -44,6 +44,11 @@ dependencies {
     testImplementation("org.testcontainers:postgresql:1.19.1")
 }
 
+dependencyLocking {
+    lockFile.set(file("$projectDir/gradle/lockfiles/${rootProject.name}-${version}.lockfile"))
+    lockAllConfigurations()
+}
+
 tasks.withType<Test> {
     useJUnitPlatform()
 }

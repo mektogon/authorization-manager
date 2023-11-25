@@ -33,6 +33,15 @@ gradlew createPatch -Ppatchname=create_user_table -Ptype=DML -Ppatchversion=01.0
     - *DML* (CREATE, ALTER, DROP)
 . *patchversion* - Указание расположения патча (*Опциональный параметр*)
 
+== Блокировка зависимостей
+В приложение используется блокировка зависимостей для исключения непредвиденных проблем, связанных с зависимостями (см. подробнее https://docs.gradle.org/current/userguide/dependency_locking.html[docs.gradle] ) +
+Блокировка зависимостей осуществляется с помощью gradle task:
+[source, text]
+----
+gradlew dependencies --write-locks
+----
+После добавления или изменения зависимостей необходимо вызвать данную таску.
+
 == Метрики приложения
 Сбор метрик приложения осуществляется c помощью Prometheus и Grafana. +
 Для того чтобы проанализировать метрики, необходимо зайти по адресу Grafana: localhost:3001
