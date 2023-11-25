@@ -1,6 +1,7 @@
 --liquibase formatted sql
---changeset DOROFEEV-MS:create_common_settings_table_6817b581-4a76-4886-93c5-c97005fc0fb8.sql:TASK-1
+--changeset Maxim Dorofeev:create_common_settings_table_6817b581-4a76-4886-93c5-c97005fc0fb8.sql
 --type DDL
+--comment AM-1
 
 CREATE TABLE common_settings
 (

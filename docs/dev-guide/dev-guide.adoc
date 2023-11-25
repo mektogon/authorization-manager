@@ -1,4 +1,4 @@
-= Руководство администратора
+= Руководство разработчика
 
 == База данных:
 В приложение используется база данных - https://www.postgresql.org/[PostgreSQL], ER-модель которой выглядит следующим образом:
@@ -13,7 +13,12 @@ psql -U user_name -d db_name
 ----
 
 == Запуск приложения
-Для запуска приложения можно воспользоваться UI Intellij IDEA, либо введя команду:
+Для запуска приложения можно воспользоваться UI Intellij IDEA c environment variables:
+[source, text]
+----
+POSTGRES_HOST=jdbc:postgresql://localhost:5430;POSTGRES_DB=graphsql_app;POSTGRES_PWD=postgres;POSTGRES_USR=postgres
+----
+Либо введя команду:
 [source, text]
 ----
 gradlew bootRun -Pargs=-Dspring.profiles.active=DEV,--POSTGRES_HOST=jdbc:postgresql://localhost:5430,--POSTGRES_DB=auth_db,--POSTGRES_USR=postgres,--POSTGRES_PWD=postgres
@@ -22,12 +27,13 @@ gradlew bootRun -Pargs=-Dspring.profiles.active=DEV,--POSTGRES_HOST=jdbc:postgre
 Генерация SQL-патча осуществляется командой
 [source, text]
 ----
-gradlew createPatch -Ppatchname=create_user_table -Ptype=DML -Ppatchversion=01.000.00
+gradlew createPatch -Ppatchname=create_user_table -Ptask=AM-385 -Ptype=DML -Ppatchversion=01.000.00
 ----
 
 Описание аргументов:
 
 . *patchname* - Логическое наименование патча (Например: create_user_table)
+. *task* - Номер задачи, в рамках которой создавался скрипт (*Опциональный параметр*)
 . *type* - Тип патча (*Опциональный параметр*)
     - *DDL* (SELECT, INSERT, UPDATE, DELETE)
     - *DML* (CREATE, ALTER, DROP)

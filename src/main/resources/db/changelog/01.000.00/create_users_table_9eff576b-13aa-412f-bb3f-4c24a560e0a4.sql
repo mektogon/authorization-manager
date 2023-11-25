@@ -1,6 +1,7 @@
 --liquibase formatted sql
---changeset DOROFEEV-MS:create_users_table_9eff576b-13aa-412f-bb3f-4c24a560e0a4.sql:TASK-1
+--changeset Maxim Dorofeev:create_users_table_9eff576b-13aa-412f-bb3f-4c24a560e0a4.sql
 --type DDL
+--comment AM-1
 
 CREATE TABLE users
 (
