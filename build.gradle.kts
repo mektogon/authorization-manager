@@ -1,3 +1,4 @@
+import java.io.ByteArrayOutputStream
 import java.util.UUID.randomUUID
 
 plugins {
@@ -70,6 +71,33 @@ tasks.bootRun {
 tasks.register("createPatch") {
 
     /**
+     * Получение имени пользователя, которое хранится в .gitconfig
+     *
+     * В случае отсутствия или пустого значения выводится заглушка: "<AUTHOR NAME>"
+     */
+    fun getGitUserName(): String {
+        val defaultAuthorText = "<AUTHOR NAME>"
+        val outputStream = ByteArrayOutputStream()
+
+        try {
+            exec {
+                executable = "git"
+                args("config", "--get", "user.name")
+                standardOutput = outputStream
+            }
+
+            return outputStream.toString().trimIndent().ifEmpty {
+                println("Warn! The username is empty! Return the stub value: $defaultAuthorText")
+                defaultAuthorText
+            }
+        } catch (e: Exception) {
+            println("Error! Couldn't find git username! Return the stub value: $defaultAuthorText")
+        }
+
+        return defaultAuthorText
+    }
+
+    /**
      * Добавление записи в changelog.yaml в зависимости от наличия или отсутствия файла.
      *
      * Если файл отсутствует - добавляется базовый текст, иначе добавляется новая запись к существующему тексту.
@@ -102,23 +130,28 @@ tasks.register("createPatch") {
         throw GradleException("The name of the patch is missing!")
     }
 
-    val versionToCatalogLiquibase: Any? = if (project.hasProperty("patchversion")) {
+    val versionToCatalogLiquibase = if (project.hasProperty("patchversion")) {
         project.property("patchversion")
     } else {
         project.version
     }
 
-    val basePathToFile = project.layout.projectDirectory.dir("src/main/resources/db/")
+    val basePathToFile = project.layout.projectDirectory.dir("src/main/resources/db/changelog")
     val changelogName = "changelog.yaml"
     val patchName = "${project.property("patchname")}_${randomUUID()}.sql"
+    val gitUserName = getGitUserName()
 
     var defaultDataScript = """
         --liquibase formatted sql
-        --changeset <AUTHOR NAME>:$patchName:<TASK NAME>
+        --changeset $gitUserName:$patchName
     """.trimIndent()
 
     if (project.hasProperty("type")) {
         defaultDataScript = defaultDataScript.plus("\n--type ${project.property("type")}")
+    }
+
+    if (project.hasProperty("task")) {
+        defaultDataScript = defaultDataScript.plus("\n--comment ${project.property("task")}")
     }
 
     outputs.files(
