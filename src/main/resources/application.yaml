@@ -14,7 +14,7 @@ spring:
     password: ${POSTGRES_PWD}
   liquibase:
     enabled: true
-    change-log: classpath:changelog/changelog.yaml
+    change-log: classpath:db/changelog/changelog.yaml
 
 management:
   endpoint:

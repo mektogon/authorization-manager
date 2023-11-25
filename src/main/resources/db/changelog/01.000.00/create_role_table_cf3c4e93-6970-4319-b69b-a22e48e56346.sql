@@ -1,6 +1,7 @@
 --liquibase formatted sql
---changeset DOROFEEV-MS:create_role_table_cf3c4e93-6970-4319-b69b-a22e48e56346.sql:TASK-1
+--changeset Maxim Dorofeev:create_role_table_cf3c4e93-6970-4319-b69b-a22e48e56346.sql
 --type DDL
+--comment AM-1
 
 CREATE TABLE role
 (

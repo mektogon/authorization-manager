@@ -1,7 +1,7 @@
 --liquibase formatted sql
---changeset DOROFEEV-MS:create_photo_table_a0034f35-e864-4937-871b-09796abb2e2e.sql:TASK-1
+--changeset Maxim Dorofeev:create_photo_table_a0034f35-e864-4937-871b-09796abb2e2e.sql
 --type DDL
-
+--comment AM-1
 
 CREATE TABLE photo
 (

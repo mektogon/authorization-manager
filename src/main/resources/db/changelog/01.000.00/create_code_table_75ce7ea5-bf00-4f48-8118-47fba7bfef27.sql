@@ -1,6 +1,7 @@
 --liquibase formatted sql
---changeset DOROFEEV-MS:create_code_table_75ce7ea5-bf00-4f48-8118-47fba7bfef27.sql:TASK-1
+--changeset Maxim Dorofeev:create_code_table_75ce7ea5-bf00-4f48-8118-47fba7bfef27.sql
 --type DDL
+--comment AM-1
 
 CREATE TABLE code
 (

@@ -8,5 +8,6 @@
 - Lombok
 - PostgreSQL
 - Swagger
+
 ## Руководство администратора
 Руководство по настройке приложения находится в [admin-guide.adoc](docs%2Fadmin-guide.adoc)

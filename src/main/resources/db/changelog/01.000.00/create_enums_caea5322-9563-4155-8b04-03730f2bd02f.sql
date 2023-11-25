@@ -1,6 +1,7 @@
 --liquibase formatted sql
---changeset DOROFEEV-MS:create_enums_caea5322-9563-4155-8b04-03730f2bd02f.sql:TASK-1
+--changeset Maxim Dorofeev:create_enums_caea5322-9563-4155-8b04-03730f2bd02f.sql
 --type DDL
+--comment AM-1
 
 CREATE TYPE gender_type AS ENUM ('MALE', 'FEMALE');
 
