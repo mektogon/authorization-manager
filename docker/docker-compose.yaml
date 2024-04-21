@@ -7,14 +7,14 @@ services:
       - "5430:5432"
     restart: on-failure
     volumes:
-      - ./auth-manager/postgresql/15.3/data:/var/lib/postgresql/data
+      - ./services/postgresql/15.3/data:/var/lib/postgresql/data
     env_file:
       - .env
     environment:
       - POSTGRES_DB=${POSTGRES_DB}
       - POSTGRES_USER=${POSTGRES_USR}
       - POSTGRES_PASSWORD=${POSTGRES_PWD}
-  auth-manager:
+  authorization-manager:
     container_name: app
     build: ../
     ports:
@@ -45,7 +45,7 @@ services:
       - "9090:9090"
     restart: on-failure
     volumes:
-      - ./auth-manager/prometheus:/prometheus
+      - ./services/prometheus:/prometheus
       - ./configuration/prometheus/prometheus.yaml:/etc/prometheus/prometheus.yml
   grafana:
     container_name: grafana
@@ -54,7 +54,7 @@ services:
       - "3000:3000"
     restart: on-failure
     volumes:
-      - ./auth-manager/grafana:/var/lib/grafana
+      - ./services/grafana:/var/lib/grafana
       - ./configuration/grafana/dashboards:/etc/grafana/provisioning/dashboards
       - ./configuration/grafana/datasources:/etc/grafana/provisioning/datasources
     env_file:

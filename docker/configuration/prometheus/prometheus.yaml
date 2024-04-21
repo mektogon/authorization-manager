@@ -1,6 +1,6 @@
 scrape_configs:
-  - job_name: "auth-manager"
+  - job_name: "authorization-manager"
     scrape_interval: 5s
     metrics_path: "/actuator/prometheus"
     static_configs:
-      - targets: ["auth-manager:8080"]
+      - targets: ["authorization-manager:8080"]
