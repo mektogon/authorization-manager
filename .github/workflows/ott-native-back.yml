@@ -1,0 +1,71 @@
+name: ott-native-back
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+permissions:
+  contents: read
+jobs:
+  build:
+    defaults:
+      run:
+        working-directory: ./ott-native-back
+    strategy:
+      matrix:
+        os: [ windows-latest ]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up JDK 20
+        uses: actions/setup-java@v3
+        with:
+          java-version: '20'
+          distribution: 'temurin'
+      - name: Gradle Wrapper Validation
+        uses: gradle/wrapper-validation-action@v1
+      - name: Run task 'build'
+        run: ./gradlew build -x test
+  test:
+    defaults:
+      run:
+        working-directory: ./ott-native-back
+    needs: build
+    strategy:
+      matrix:
+        os: [ windows-latest ]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up JDK 20
+        uses: actions/setup-java@v3
+        with:
+          java-version: '20'
+          distribution: 'temurin'
+      - name: Gradle Wrapper Validation
+        uses: gradle/wrapper-validation-action@v1
+      - name: Run task 'test'
+        run: ./gradlew test
+  package-artifact:
+    defaults:
+      run:
+        working-directory: ./ott-native-back
+    needs: [ build, test ]
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up JDK 20
+        uses: actions/setup-java@v3
+        with:
+          java-version: '20'
+          distribution: 'temurin'
+      - name: Gradle Wrapper Validation
+        uses: gradle/wrapper-validation-action@v1
+      - name: Run task 'bootJar'
+        run: ./gradlew bootJar
+      - uses: actions/upload-artifact@v3
+        with:
+          name: ott-native-back
+          path: ./ott-native-back/build/libs
+          retention-days: 1
+          if-no-files-found: error

@@ -1,0 +1,56 @@
+package ru.dorofeev.shareddatabase.model.entity;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.persistence.Version;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.annotations.UuidGenerator;
+
+import java.time.Instant;
+import java.util.UUID;
+
+@Table(name = "common_settings")
+@Entity
+@Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class CommonSettings {
+
+    @Id
+    @UuidGenerator
+    @GeneratedValue
+    @Column(name = "id", nullable = false)
+    private UUID id;
+
+    @Column(name = "name", nullable = false)
+    private String name;
+
+    @Column(name = "value", nullable = false)
+    private String value;
+
+    @Column(name = "description", length = 500)
+    private String description;
+
+    @CreationTimestamp
+    @Column(name = "create_date", nullable = false)
+    private Instant createDate;
+
+    @UpdateTimestamp
+    @Column(name = "update_date", nullable = false)
+    private Instant updateDate;
+
+    @Version
+    @Column(name = "version", nullable = false)
+    private Long version;
+}

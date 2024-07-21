@@ -1,5 +1,14 @@
 version: "3"
 services:
+  jenkins:
+    container_name: jenkins-jdk17
+    image: jenkins/jenkins:jdk17
+    user: root
+    ports:
+     - 8080:8080
+     - 50000:50000
+    volumes:
+      - ./services/jenkins:/var/jenkins_home
   postgres:
     container_name: postgres-15.3
     image: postgres:15.3
@@ -14,27 +23,11 @@ services:
       - POSTGRES_DB=${POSTGRES_DB}
       - POSTGRES_USER=${POSTGRES_USR}
       - POSTGRES_PASSWORD=${POSTGRES_PWD}
-  auth-manager:
-    container_name: app
-    build: ../
-    ports:
-      - "8081:8080"
-    restart: always
-    depends_on:
-      postgres:
-        condition: service_started
-    env_file:
-      - .env
-    environment:
-      - POSTGRES_HOST=${POSTGRES_HOST}
-      - POSTGRES_DB=${POSTGRES_DB}
-      - POSTGRES_USR=${POSTGRES_USR}
-      - POSTGRES_PWD=${POSTGRES_PWD}
   nginx:
     container_name: backend-nginx-1.25.3
     image: nginx:1.25.3
     ports:
-      - "8080:8080"
+      - "8081:8081"
     restart: on-failure
     volumes:
       - ./configuration/nginx:/etc/nginx/conf.d
@@ -45,7 +38,7 @@ services:
       - "9090:9090"
     restart: on-failure
     volumes:
-      - ./auth-manager/prometheus:/prometheus
+      - ./services/prometheus:/prometheus
       - ./configuration/prometheus/prometheus.yaml:/etc/prometheus/prometheus.yml
   grafana:
     container_name: grafana
@@ -54,7 +47,7 @@ services:
       - "3000:3000"
     restart: on-failure
     volumes:
-      - ./auth-manager/grafana:/var/lib/grafana
+      - ./services/grafana:/var/lib/grafana
       - ./configuration/grafana/dashboards:/etc/grafana/provisioning/dashboards
       - ./configuration/grafana/datasources:/etc/grafana/provisioning/datasources
     env_file:
@@ -62,3 +55,19 @@ services:
     environment:
       - GF_SECURITY_ADMIN_USER=${GRAFANA_ADMIN_USR}
       - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PWD}
+#  auth-manager: Не актуально
+#    container_name: app
+#    build: ../
+#    ports:
+#      - "8081:8080"
+#    restart: always
+#    depends_on:
+#      postgres:
+#        condition: service_started
+#    env_file:
+#      - .env
+#    environment:
+#      - POSTGRES_HOST=${POSTGRES_HOST}
+#      - POSTGRES_DB=${POSTGRES_DB}
+#      - POSTGRES_USR=${POSTGRES_USR}
+#      - POSTGRES_PWD=${POSTGRES_PWD}
